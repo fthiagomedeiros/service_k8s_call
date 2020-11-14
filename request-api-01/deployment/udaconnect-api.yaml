@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: requested-api-01
+  name: requested-api-01
+spec:
+  ports:
+  - name: "5000"
+    port: 5000
+    targetPort: 5000
+    nodePort: 30002
+  selector:
+    service: requested-api-01
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: requested-api-01
+  name: requested-api-01
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: requested-api-01
+  template:
+    metadata:
+      labels:
+        service: requested-api-01
+    spec:
+      containers:
+      - image: fthiagomedeiros/requested-api-01:latest
+        name: requested-api-01
+        imagePullPolicy: Always
+      restartPolicy: Always
